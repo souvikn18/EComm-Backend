@@ -47,3 +47,44 @@ export const SignUp = asyncHandler( async (req, res) => {
         user
     })
 })
+
+export const Login = asyncHandler(async(req, res) => {
+    const {email, password} = req.body;
+
+    if (!email || !password) {
+        throw new CustomError("Provide email and password", 400)
+    }
+
+    const user = User.findOne({email}).select("+password");
+
+    if (!user) {
+        throw new CustomError("Invalid credentials", 400)
+    }
+
+    const isPasswordMatched = await user.comparePassword(password)
+
+    if (isPasswordMatched) {
+        const token = user.getJWTtoken();
+        user.password = undefined;
+        res.cookie("token", token, CookieOptions)
+        res.status(200).json({
+            success: true,
+            token,
+            user
+        })
+    }
+
+    throw new CustomError("Incorrect password", 400)
+})
+
+export const Logout = asyncHandler(async(req, res) => {
+    res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly:true
+    })
+
+    res.status(200).json({
+        success:true,
+        message: "Logged Out"
+    })
+})
