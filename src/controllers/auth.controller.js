@@ -88,3 +88,16 @@ export const Logout = asyncHandler(async(req, res) => {
         message: "Logged Out"
     })
 })
+
+export const getProfile = asyncHandler(async (req, res) => {
+    const {user} = req;
+
+    if (!user) {
+        throw new CustomError("user not found", 400);
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
