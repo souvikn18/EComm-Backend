@@ -9,3 +9,5 @@ router.post('/', isLoggedIn, authorize(AuthRoles.ADMIN), AddCoupon)
 router.post('/:id', isLoggedIn, authorize(AuthRoles.ADMIN || AuthRoles.MODERATOR), deleteCoupon )
 router.put('/action/:id', isLoggedIn, authorize(AuthRoles.ADMIN || AuthRoles.MODERATOR), UpdateCoupon)
 router.get('/', isLoggedIn, getAllCoupon)
+
+export default router
