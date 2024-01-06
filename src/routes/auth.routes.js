@@ -1,5 +1,5 @@
 import {Router} from "express"
-import {SignUp, Login, Logout} from "../controllers/auth.controller.js"
+import {SignUp, Login, Logout, getProfile} from "../controllers/auth.controller.js"
 import {isLoggedIn} from "../middleware/auth.middleware.js"
 
 

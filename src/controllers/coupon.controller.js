@@ -77,3 +77,16 @@ export const DisableCoupon = asyncHandler(async(req, res) => {
         disabledCoupon
     })
 })
+
+export const getAllCoupon = asyncHandler(async(req, res) => {
+    const coupon = await Coupon.find({})
+
+    if (!coupon) {
+        throw new CustomError("No coupon found", 404)
+    }
+
+    res.status(200).json({
+        success: true,
+        coupon
+    })
+})
