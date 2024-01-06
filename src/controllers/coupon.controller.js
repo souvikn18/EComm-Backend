@@ -27,19 +27,11 @@ export const AddCoupon = asyncHandler(async (req, res) => {
 })
 
 export const UpdateCoupon = asyncHandler(async (req, res) => {
-    const {code, discount} = req.body;
+    const {action} = req.body;
     const {id: coupunId} = req.params;
 
-    if (!code) {
-        throw new CustomError("Need a code to update", 500)
-    }
-    if (!discount) {
-        throw new CustomError("Need a discount amount", 500)
-    }
-
     const couponToUpdate = await Coupon.findByIdAndUpdate(coupunId, {
-        code,
-        discount
+        active: action
     }, {
         new: true,
         runValidators: true
@@ -88,5 +80,20 @@ export const getAllCoupon = asyncHandler(async(req, res) => {
     res.status(200).json({
         success: true,
         coupon
+    })
+})
+
+export const deleteCoupon = asyncHandler(async(req, res) => {
+    const {id: couponId} = req.params
+
+    const couponToDelete = await Coupon.findByIdAndDelete(couponId)
+
+    if (!couponToDelete) {
+        throw new CustomError("Coupon not found", 400)
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Coupon deleted"
     })
 })
